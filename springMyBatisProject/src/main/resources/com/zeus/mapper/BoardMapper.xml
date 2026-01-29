@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeus.mapper.BoardMapper">
+	<insert id="create">
+		INSERT INTO MYBATISBOARD(no, title, content,
+		writer)
+		VALUES( mybatisboard_seq.NEXTVAL, #{title}, #{content},
+		#{writer})
+	</insert>
+	<select id="read" resultType="Board">
+		SELECT no, title, content,
+		writer, REGDATE FROM MYBATISBOARD
+		WHERE no = #{no}
+	</select>
+	<update id="update">
+		UPDATE MYBATISBOARD
+		SET title = #{title}, content = #{content}, writer = #{writer}
+		WHERE no = #{no}
+	</update>
+	<delete id="delete">
+		DELETE FROM MYBATISBOARD WHERE no = #{no}
+	</delete>
+	<select id="list" resultType="Board"> 
+<![CDATA[ 
+SELECT no, title, content, writer, regdate 
+FROM mybatisboard WHERE no > 0 
+ORDER BY no DESC, regdate DESC 
+]]>
+	</select>
+	<select id="search" resultType="Board">
+		SELECT * FROM MYBATISBOARD
+		<where>
+			<if test="keyword != null and keyword != ''">
+				<choose>
+					<when test="searchType == 'title'">
+						AND title LIKE '%' || #{keyword} || '%'
+					</when>
+					<when test="searchType == 'content'">
+						AND content LIKE '%' || #{keyword} || '%'
+					</when>
+					<when test="searchType == 'writer'">
+						AND writer LIKE '%' || #{keyword} || '%'
+					</when>
+					<otherwise>
+						AND title LIKE '%' || #{keyword} || '%'
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+		ORDER BY no DESC
+	</select>
+</mapper>
