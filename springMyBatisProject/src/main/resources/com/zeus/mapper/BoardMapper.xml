@@ -21,6 +21,7 @@
 		DELETE FROM MYBATISBOARD WHERE no = #{no}
 	</delete>
 	<select id="list" resultType="Board"> 
+	<!-- 오라클에서 쓰는 대소 비교표현이 헷갈릴 수가 있어서 ![CDATA[]]를 써준다. 태그로 인식하게 하지 않기위해 -->
 <![CDATA[ 
 SELECT no, title, content, writer, regdate 
 FROM mybatisboard WHERE no > 0 
